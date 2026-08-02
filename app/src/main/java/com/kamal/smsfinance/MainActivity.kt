@@ -196,8 +196,8 @@ private fun AppRoot(viewModel: TransactionViewModel) {
                 )
             }
         }
-    ) { innerPadding: androidx.compose.foundation.layout.PaddingValues ->
-        androidx.compose.foundation.layout.Box(modifier = Modifier.padding(innerPadding)) {
+    ) { innerPadding ->
+        Box(modifier = Modifier.padding(innerPadding)) {
             when (tab) {
                 Tab.LIST -> TransactionListScreen(
                     transactions = transactions,
@@ -213,8 +213,6 @@ private fun AppRoot(viewModel: TransactionViewModel) {
                 Tab.COUNTERPARTIES -> CounterpartiesScreen(
                     counterparties = counterparties,
                     balanceOf = { id ->
-                        // Quick derived balance from the already-loaded transaction list,
-                        // avoiding a separate Flow subscription per list row.
                         transactions.filter { it.counterpartyId == id }
                             .fold(0L) { acc, t ->
                                 if (t.type == com.kamal.smsfinance.data.TransactionType.INCOME) acc + t.amountToman else acc - t.amountToman
